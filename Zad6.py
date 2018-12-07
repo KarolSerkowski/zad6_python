@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog as fd
-import datetime
 import os
 import glob
-import shutil
+import csv
+
 
 from tkinter import messagebox as msb
 
@@ -12,6 +12,7 @@ class Application:
 
     directory = ""
     listCsvFiles = []
+    contentCsv = []
 
     def __init__(self):
         self.window = tk.Tk()
@@ -32,7 +33,16 @@ class Application:
 
         if msb.askokcancel("Wybór folderu z plikami CSV", "Wybierz folder w ktorym znajduje sie pliki CSV"):
             self.openDirectoryWithCsvFiles()
-            self.searchFilesInDirectory()
+            self.createListPathesCsvFilesInDirectory()
+            self.openCsvFile()
+
+            for row in self.contentCsv:
+                # print (row['Kwota transakcji'])
+                # print(row)
+                for x in row:
+                    print(x)
+            index = "Numer placówki"
+            self.makeStatistic(self.contentCsv, index)
 
 
 
@@ -44,11 +54,6 @@ class Application:
             self.directory=self.walidacjaSciezki(self.directory)
             print("katalog {katalog} został załadowany".format(katalog=self.directory))
 
-    def searchFilesInDirectory(self):
-        for file in glob.glob(self.directory+"*.csv"):
-            self.listCsvFiles.append(file)
-            print("Pliki zostały zaimportowane")
-
     def walidacjaSciezki(self,path):
         newPath = path.replace('\n', '')
         newPath = newPath.replace("/[/]+", "/")
@@ -56,6 +61,34 @@ class Application:
         if (newPath[len(newPath)-1]!="\\" or newPath[len(newPath)-1]!="/"):
             newPath = newPath+"/"
         return newPath
+
+    def createListPathesCsvFilesInDirectory(self):
+        for file in glob.glob(self.directory+"*.csv"):
+            self.listCsvFiles.append(file)
+            print("Scieżki plików zostały zaimportowane (%s)"%file)
+
+    def openCsvFile(self):
+        for fileCsv in self.listCsvFiles:
+            with open(fileCsv, 'r') as csvfile:
+                content=csv.reader(csvfile, delimiter=',')
+                contentList = []
+                for line in content:
+                    contentList.append(line)
+
+                self.contentCsv.append(contentList)
+                print("Plik %s został wczytany"%fileCsv)
+
+    def makeStatistic(contentList, index):
+        for row in contentList:
+            indexNumerPlacowki = row[index]
+            updateStatistic = contentList[indexNumerPlacowki]
+            if (updateStatistic):
+                print(contentList[indexNumerPlacowki])
+                # for prezydent in (updateStatistic):
+                #     updateStatistic['%s' % prezydent] += int(row['%s' % prezydent])
+                    # print(prezydent)
+                    # print(updateStatistic['%s' %prezydent])
+        # return statisticTemplate
 
 
 
