@@ -37,12 +37,10 @@ class Application:
             self.openCsvFile()
 
             for row in self.contentCsv:
-                # print (row['Kwota transakcji'])
-                # print(row)
                 for x in row:
                     print(x)
             index = "Numer placówki"
-            self.makeStatistic(self.contentCsv, index)
+            self.makeStatistic(index)
 
 
 
@@ -78,13 +76,14 @@ class Application:
                 self.contentCsv.append(contentList)
                 print("Plik %s został wczytany"%fileCsv)
 
-    def makeStatistic(contentList, index):
-        for row in contentList:
-            indexNumerPlacowki = row[index]
-            updateStatistic = contentList[indexNumerPlacowki]
-            if (updateStatistic):
-                print(contentList[indexNumerPlacowki])
+    def makeStatistic(self,index):
+        for csv in self.contentCsv:             #dopuki sa czytane pliki csv
+            indexNumerPlacowki = csv[1]     #wybierz z pliku csv kolmne index
+            # updateStatistic = self.contentCsv[indexNumerPlacowki]
+            for nrPlac in indexNumerPlacowki:
+                    # print(indexNumerPlacowki[nrPlac])
                 # for prezydent in (updateStatistic):
+                print(nrPlac)
                 #     updateStatistic['%s' % prezydent] += int(row['%s' % prezydent])
                     # print(prezydent)
                     # print(updateStatistic['%s' %prezydent])
