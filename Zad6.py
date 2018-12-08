@@ -36,9 +36,6 @@ class Application:
             self.createListPathesCsvFilesInDirectory()
             self.openCsvFile()
 
-            for row in self.contentCsv:
-                for x in row:
-                    print(x)
             index = "Numer placówki"
             self.makeStatistic(index)
 
@@ -78,7 +75,7 @@ class Application:
 
     def makeStatistic(self,index):
         for csv in self.contentCsv:             #dopuki sa czytane pliki csv
-            indexNumerPlacowki = csv[1]     #wybierz z pliku csv kolmne index
+            indexNumerPlacowki = csv    #csv to caly plik
             # updateStatistic = self.contentCsv[indexNumerPlacowki]
             for nrPlac in indexNumerPlacowki:
                     # print(indexNumerPlacowki[nrPlac])
