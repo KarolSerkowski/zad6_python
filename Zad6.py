@@ -65,7 +65,7 @@ class Application:
     def openCsvFile(self):
         for fileCsv in self.listCsvFiles:
             with open(fileCsv, 'r') as csvfile:
-                content=csv.reader(csvfile, delimiter=',')
+                content=csv.DictReader(csvfile, delimiter=',')
                 contentList = []
                 for line in content:
                     contentList.append(line)
@@ -75,12 +75,14 @@ class Application:
 
     def makeStatistic(self,index):
         for csv in self.contentCsv:             #dopuki sa czytane pliki csv
-            indexNumerPlacowki = csv    #csv to caly plik
-            # updateStatistic = self.contentCsv[indexNumerPlacowki]
-            for nrPlac in indexNumerPlacowki:
+            contentCsvFile = csv    #csv to caly plik
+            # updateStatistic = contentCsvFile[1]
+            # print(updateStatistic)
+            for row in contentCsvFile:
                     # print(indexNumerPlacowki[nrPlac])
                 # for prezydent in (updateStatistic):
-                print(nrPlac)
+                print(row)
+                print("pobrany row")
                 #     updateStatistic['%s' % prezydent] += int(row['%s' % prezydent])
                     # print(prezydent)
                     # print(updateStatistic['%s' %prezydent])
