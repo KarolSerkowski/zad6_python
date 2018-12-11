@@ -13,6 +13,7 @@ class Application:
     directory = ""
     listCsvFiles = []
     contentCsv = []
+    statisticFromFilesCsv = {}
 
     def __init__(self):
         self.window = tk.Tk()
@@ -66,27 +67,34 @@ class Application:
         for fileCsv in self.listCsvFiles:
             with open(fileCsv, 'r') as csvfile:
                 content=csv.DictReader(csvfile, delimiter=',')
-                contentList = []
+                contentList = {}
                 for line in content:
-                    contentList.append(line)
+                    # contentList.append(line)
+                    contentList=line
+
 
                 self.contentCsv.append(contentList)
                 print("Plik %s został wczytany"%fileCsv)
 
     def makeStatistic(self,index):
         for csv in self.contentCsv:             #dopuki sa czytane pliki csv
-            contentCsvFile = csv    #csv to caly plik
-            # updateStatistic = contentCsvFile[1]
-            # print(updateStatistic)
-            for row in contentCsvFile:
-                    # print(indexNumerPlacowki[nrPlac])
-                # for prezydent in (updateStatistic):
-                print(row)
-                print("pobrany row")
-                #     updateStatistic['%s' % prezydent] += int(row['%s' % prezydent])
-                    # print(prezydent)
-                    # print(updateStatistic['%s' %prezydent])
-        # return statisticTemplate
+            for row in csv:
+
+
+                # while self.statisticFromFilesCsv[row[index]]:
+                #     print("wartosc juz istnieje")
+                # else:
+                #     self.statisticFromFilesCsv.append(row)
+                #     print("wartosc dodana do licznika")
+                # self.contentCsv.keys();
+                print(row[index])
+
+
+
+
+
+
+
 
 
 
