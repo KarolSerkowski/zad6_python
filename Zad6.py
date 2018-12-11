@@ -35,7 +35,7 @@ class Application:
         if msb.askokcancel("Wybór folderu z plikami CSV", "Wybierz folder w ktorym znajduje sie pliki CSV"):
             self.openDirectoryWithCsvFiles()
             self.createListPathesCsvFilesInDirectory()
-            self.contentCsv=self.openCsvFile()
+            self.contentCsv=self.openAndConvertValueInCsvFile()
 
             index = "Numer placówki"
             self.makeStatistic(index)
@@ -63,35 +63,35 @@ class Application:
             self.listCsvFiles.append(file)
             print("Scieżki plików zostały zaimportowane (%s)"%file)
 
-    def openCsvFile(self):
+    def openAndConvertValueInCsvFile(self):
+        dictContentOfAllCsvFiles = []
         for fileCsv in self.listCsvFiles:
             with open(fileCsv, 'r') as csvfile:
                 content=csv.DictReader(csvfile, delimiter=',')
-                contentList = {}
+
+
+                contentAndSumValueFromCsv = {}
                 for line in content:
                     dane = 0
-                    # contentList.append(line)
                     print(line.items())
-                    if line['Numer placówki'] in contentList:
+                    if line['Numer placówki'] in contentAndSumValueFromCsv:
                         print("Istnieje taka palcówka %s"%line['Numer placówki'])
-                        dane = int(line['Kwota transakcji']) + int(contentList[line['Numer placówki']])
-                        contentList[line['Numer placówki']]+= dane
+                        dane = int(line['Kwota transakcji']) + int(contentAndSumValueFromCsv[line['Numer placówki']])
+                        contentAndSumValueFromCsv[line['Numer placówki']]+= dane
                     else:
                         print(line['Kwota transakcji'])
                         dane = int(line['Kwota transakcji'])
                         print("Nie było takiej lpacowki, dodano wartosc %i "%dane+"dla placówki nr:")
-                        contentList[line['Numer placówki']] = dane
+                        contentAndSumValueFromCsv[line['Numer placówki']] = dane
                     print(line['Numer placówki'])
 
-
-                # self.contentCsv.append(contentList)
                 print("Plik %s został wczytany"%fileCsv)
-        return contentList
+        return contentAndSumValueFromCsv
 
     def makeStatistic(self,index):
         # print(self.contentCsv.keys())
         # print(self.contentCsv.values())
-        for csv in self.contentCsv:             #dopuki sa czytane pliki csv
+        for csv in self.contentCsv:
             print(csv)
             print(self.contentCsv[csv])
          
