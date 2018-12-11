@@ -35,7 +35,7 @@ class Application:
         if msb.askokcancel("Wybór folderu z plikami CSV", "Wybierz folder w ktorym znajduje sie pliki CSV"):
             self.openDirectoryWithCsvFiles()
             self.createListPathesCsvFilesInDirectory()
-            self.openCsvFile()
+            self.contentCsv=self.openCsvFile()
 
             index = "Numer placówki"
             self.makeStatistic(index)
@@ -69,30 +69,32 @@ class Application:
                 content=csv.DictReader(csvfile, delimiter=',')
                 contentList = {}
                 for line in content:
+                    dane = 0
                     # contentList.append(line)
-                    contentList=line
+                    print(line.items())
+                    if line['Numer placówki'] in contentList:
+                        print("Istnieje taka palcówka %s"%line['Numer placówki'])
+                        dane = int(line['Kwota transakcji']) + int(contentList[line['Numer placówki']])
+                        contentList[line['Numer placówki']]+= dane
+                    else:
+                        print(line['Kwota transakcji'])
+                        dane = int(line['Kwota transakcji'])
+                        print("Nie było takiej lpacowki, dodano wartosc %i "%dane+"dla placówki nr:")
+                        contentList[line['Numer placówki']] = dane
+                    print(line['Numer placówki'])
 
 
-                self.contentCsv.append(contentList)
+                # self.contentCsv.append(contentList)
                 print("Plik %s został wczytany"%fileCsv)
+        return contentList
 
     def makeStatistic(self,index):
+        # print(self.contentCsv.keys())
+        # print(self.contentCsv.values())
         for csv in self.contentCsv:             #dopuki sa czytane pliki csv
-            for row in csv:
-
-
-                # while self.statisticFromFilesCsv[row[index]]:
-                #     print("wartosc juz istnieje")
-                # else:
-                #     self.statisticFromFilesCsv.append(row)
-                #     print("wartosc dodana do licznika")
-                # self.contentCsv.keys();
-                print(row[index])
-
-
-
-
-
+            print(csv)
+            print(self.contentCsv[csv])
+         
 
 
 
