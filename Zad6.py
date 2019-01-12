@@ -15,6 +15,7 @@ class Application:
     contentCsv = []
     statisticFromFilesCsv = {}
     dictStatisticOfAllCsvFiles = {}
+    displayStatistics = ""
 
     def __init__(self):
         self.window = tk.Tk()
@@ -37,6 +38,7 @@ class Application:
             self.openDirectoryWithCsvFiles()
             self.createListPathesCsvFilesInDirectory()
             self.contentCsv=self.openAndConvertValueInCsvFile()
+            self.displaySum()
             # self.makeStatistic(self.contentCsv)
 
 
@@ -45,7 +47,7 @@ class Application:
 
         self.directory = fd.askdirectory()  # wskazanie ścieżki do folderu docelowego
         if self.directory:
-            msb.showinfo("Info", "Wybrano folder {folder}, pliki CSV które się w nim znajdują zostaną przetworzone.".format(folder=self.directory))
+            msb.showinfo("Info", "Wybrano folder {folder}, pliki CSV które się w nim znajdują zostaną przetworzone a posumowanie zostanie wyświetlone w głównym oknie.".format(folder=self.directory))
             self.directory=self.walidacjaSciezki(self.directory)
             print("katalog {katalog} został załadowany".format(katalog=self.directory))
 
@@ -63,7 +65,6 @@ class Application:
             print("Scieżki plików zostały zaimportowane (%s)"%file)
 
     def openAndConvertValueInCsvFile(self):
-        dictContentOfAllCsvFiles = {}
         for fileCsv in self.listCsvFiles:
             with open(fileCsv, 'r') as csvfile:
                 content=csv.DictReader(csvfile, delimiter=',')
@@ -72,19 +73,10 @@ class Application:
 
                     print("%s"%row['Numer placówki'])
 
-
-                    dictContentOfAllCsvFiles["%s"%row['Data i godzina']] = {"Numer placówki:"+row['Numer placówki'],"Kwota transakcji:"+row['Kwota transakcji']}
-
-
-                    print(dictContentOfAllCsvFiles["%s"%row['Data i godzina']])
                     self.dictStatistics(row['Numer placówki'], row['Kwota transakcji'])
 
 
             print("Plik %s został wczytany"%fileCsv)
-
-        return dictContentOfAllCsvFiles
-
-
 
 
 
@@ -95,12 +87,15 @@ class Application:
             self.dictStatisticOfAllCsvFiles[placowka]=int(kwota)
         print("Przetworzona suma:")
         print(self.dictStatisticOfAllCsvFiles[placowka])
-
          
-
-
-
-
+    def displaySum(self):
+        nr_placowki = 0
+        for placowka in self.dictStatisticOfAllCsvFiles:
+            nr_placowki +=1
+            suma_transakcji = self.dictStatisticOfAllCsvFiles['%s'%nr_placowki]
+            self.displayStatistics += "Suma transakcji w placówce nr {placowka}: {suma}\n ".format(placowka=nr_placowki, suma=suma_transakcji)
+            print (self.dictStatisticOfAllCsvFiles['%s'%nr_placowki])
+        self.displayInfo(self.displayStatistics)
 
 
 
