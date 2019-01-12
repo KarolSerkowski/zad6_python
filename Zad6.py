@@ -14,6 +14,7 @@ class Application:
     listCsvFiles = []
     contentCsv = []
     statisticFromFilesCsv = {}
+    dictStatisticOfAllCsvFiles = {}
 
     def __init__(self):
         self.window = tk.Tk()
@@ -36,9 +37,7 @@ class Application:
             self.openDirectoryWithCsvFiles()
             self.createListPathesCsvFilesInDirectory()
             self.contentCsv=self.openAndConvertValueInCsvFile()
-
-            index = "Numer placówki"
-            self.makeStatistic(index)
+            # self.makeStatistic(self.contentCsv)
 
 
 
@@ -64,36 +63,39 @@ class Application:
             print("Scieżki plików zostały zaimportowane (%s)"%file)
 
     def openAndConvertValueInCsvFile(self):
-        dictContentOfAllCsvFiles = []
+        dictContentOfAllCsvFiles = {}
         for fileCsv in self.listCsvFiles:
             with open(fileCsv, 'r') as csvfile:
                 content=csv.DictReader(csvfile, delimiter=',')
+                for row in content:
 
 
-                contentAndSumValueFromCsv = {}
-                for line in content:
-                    dane = 0
-                    print(line.items())
-                    if line['Numer placówki'] in contentAndSumValueFromCsv:
-                        print("Istnieje taka palcówka %s"%line['Numer placówki'])
-                        dane = int(line['Kwota transakcji']) + int(contentAndSumValueFromCsv[line['Numer placówki']])
-                        contentAndSumValueFromCsv[line['Numer placówki']]+= dane
-                    else:
-                        print(line['Kwota transakcji'])
-                        dane = int(line['Kwota transakcji'])
-                        print("Nie było takiej lpacowki, dodano wartosc %i "%dane+"dla placówki nr:")
-                        contentAndSumValueFromCsv[line['Numer placówki']] = dane
-                    print(line['Numer placówki'])
+                    print("%s"%row['Numer placówki'])
 
-                print("Plik %s został wczytany"%fileCsv)
-        return contentAndSumValueFromCsv
 
-    def makeStatistic(self,index):
-        # print(self.contentCsv.keys())
-        # print(self.contentCsv.values())
-        for csv in self.contentCsv:
-            print(csv)
-            print(self.contentCsv[csv])
+                    dictContentOfAllCsvFiles["%s"%row['Data i godzina']] = {"Numer placówki:"+row['Numer placówki'],"Kwota transakcji:"+row['Kwota transakcji']}
+
+
+                    print(dictContentOfAllCsvFiles["%s"%row['Data i godzina']])
+                    self.dictStatistics(row['Numer placówki'], row['Kwota transakcji'])
+
+
+            print("Plik %s został wczytany"%fileCsv)
+
+        return dictContentOfAllCsvFiles
+
+
+
+
+
+    def dictStatistics(self, placowka, kwota):
+        if placowka in self.dictStatisticOfAllCsvFiles:
+            self.dictStatisticOfAllCsvFiles[placowka]+=int(kwota)
+        else:
+            self.dictStatisticOfAllCsvFiles[placowka]=int(kwota)
+        print("Przetworzona suma:")
+        print(self.dictStatisticOfAllCsvFiles[placowka])
+
          
 
 
