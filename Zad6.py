@@ -39,9 +39,6 @@ class Application:
             self.createListPathesCsvFilesInDirectory()
             self.contentCsv=self.openAndConvertValueInCsvFile()
             self.displaySum()
-            # self.makeStatistic(self.contentCsv)
-
-
 
     def openDirectoryWithCsvFiles(self):
 
